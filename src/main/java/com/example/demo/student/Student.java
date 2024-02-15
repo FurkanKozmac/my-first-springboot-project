@@ -1,31 +1,40 @@
 package com.example.demo.student;
 
 import java.time.LocalDate;
+import java.time.Period;
 
+import jakarta.persistence.*;;
+
+@Entity
+@Table
 public class Student {
+    @Id
+    @SequenceGenerator(name = "student_sequence", sequenceName = "student_sequence", allocationSize = 1)
+
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_sequence")
+
     private Long id;
     private String email;
     private String name;
     private LocalDate dob;
+    @Transient
     private Integer age;
 
     public Student() {
 
     }
 
-    public Student(String email, String name, LocalDate dob, Integer age) {
+    public Student(String email, String name, LocalDate dob) {
         this.email = email;
         this.name = name;
         this.dob = dob;
-        this.age = age;
     }
-    
-    public Student(Long id, String email, String name, LocalDate dob, Integer age) {
+
+    public Student(Long id, String email, String name, LocalDate dob) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.dob = dob;
-        this.age = age;
     }
 
     public Long getId() {
@@ -61,7 +70,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(dob, LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -71,13 +80,13 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-        "id=" + id + 
-        ", name='" + name + "\'" +
-        ", email='" + email + "\'" +
-        ", dob=" + dob + 
-        ", age=" + age + 
-        "}";
+                "id=" + id +
+                ", name='" + name + "\'" +
+                ", email='" + email + "\'" +
+                ", dob=" + dob +
+                ", age=" + age +
+                "}";
 
     }
-    
+
 }
